@@ -9,7 +9,7 @@ public:
     virtual void SetUp();
     virtual void TearDown();
 
-    gai_tracker_t* tracker;
+    struct gai_tracker* tracker;
     static const char* tracking_id;
     static const char* client_id;
 };

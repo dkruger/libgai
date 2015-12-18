@@ -4,8 +4,8 @@
 
 
 
-// Define the gai_tracker_t, its contents are private
-struct gai_tracker_st {
+// Define the gai_tracker struct, its contents are private
+struct gai_tracker {
     char* tracking_id;
     char* client_id;
     void* context;
@@ -13,12 +13,12 @@ struct gai_tracker_st {
 
 
 
-gai_tracker_t* gai_tracker_new(
+struct gai_tracker* gai_tracker_new(
     const char* tracking_id,
     const char* client_id,
     void* context)
 {
-    gai_tracker_t* tracker = malloc(sizeof(gai_tracker_t));
+    struct gai_tracker* tracker = malloc(sizeof(struct gai_tracker));
     tracker->tracking_id = strdup(tracking_id);
     tracker->client_id = strdup(client_id);
     tracker->context = context;
@@ -27,7 +27,7 @@ gai_tracker_t* gai_tracker_new(
 
 
 
-void gai_tracker_free(gai_tracker_t* tracker)
+void gai_tracker_free(struct gai_tracker* tracker)
 {
     free(tracker->tracking_id);
     free(tracker->client_id);
@@ -36,14 +36,14 @@ void gai_tracker_free(gai_tracker_t* tracker)
 
 
 
-const char* gai_tracking_id(gai_tracker_t* tracker)
+const char* gai_tracking_id(struct gai_tracker* tracker)
 {
     return tracker->tracking_id;
 }
 
 
 
-const char* gai_client_id(gai_tracker_t* tracker)
+const char* gai_client_id(struct gai_tracker* tracker)
 {
     return tracker->client_id;
 }

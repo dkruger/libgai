@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 // Forward declarations
-typedef struct gai_tracker_st gai_tracker_t;
+struct gai_tracker;
 
 
 
@@ -22,7 +22,7 @@ typedef struct gai_tracker_st gai_tracker_t;
  *
  * The ownership of context is left to the caller.
  */
-gai_tracker_t* gai_tracker_new(
+struct gai_tracker* gai_tracker_new(
     const char* tracking_id,
     const char* client_id,
     void* context);
@@ -30,17 +30,17 @@ gai_tracker_t* gai_tracker_new(
 /**
  * Frees the @a tracker instance.
  */
-void gai_tracker_free(gai_tracker_t* tracker);
+void gai_tracker_free(struct gai_tracker* tracker);
 
 /**
  * Retrieves the tracking id assigned to the tracker instance
  */
-const char* gai_tracking_id(gai_tracker_t* tracker);
+const char* gai_tracking_id(struct gai_tracker* tracker);
 
 /**
  * Retrieves the client id assigned to the tracker instance
  */
-const char* gai_client_id(gai_tracker_t* tracker);
+const char* gai_client_id(struct gai_tracker* tracker);
 
 #ifdef __cplusplus
 }
