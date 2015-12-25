@@ -102,3 +102,77 @@ TEST_F(GaiAssocArrayTest, multipleEntriesMayRetrievedFromASingleArray)
     EXPECT_STREQ("def", gai_assoc_array_get(array, "key2"));
     EXPECT_STREQ("ghi", gai_assoc_array_get(array, "key3"));
 }
+
+
+
+TEST_F(GaiAssocArrayTest, theIteratorToAnEmptyArrayIsNull)
+{
+    EXPECT_EQ(NULL, gai_assoc_array_begin(array));
+}
+
+
+
+TEST_F(GaiAssocArrayTest, theIteratorPointsToTheFirstEntryInTheArray)
+{
+    gai_assoc_array_set(array, "key1", "abc");
+
+    struct gai_assoc_array_iterator* iterator = gai_assoc_array_begin(array);
+
+    EXPECT_STREQ("key1", gai_assoc_array_get_key(iterator));
+    EXPECT_STREQ("abc", gai_assoc_array_get_value(iterator));
+    gai_assoc_array_iterator_free(iterator);
+}
+
+
+
+TEST_F(GaiAssocArrayTest, anIteratorIsNullWhenItReachesTheLastNode)
+{
+    gai_assoc_array_set(array, "key1", "abc");
+    gai_assoc_array_set(array, "key2", "def");
+    gai_assoc_array_set(array, "key3", "ghi");
+
+    struct gai_assoc_array_iterator* iterator1 = gai_assoc_array_begin(array);
+    ASSERT_NE((struct gai_assoc_array_iterator*)NULL, iterator1);
+    struct gai_assoc_array_iterator* iterator2 = gai_assoc_array_next(
+        iterator1);
+    ASSERT_EQ(iterator1, iterator2);
+    struct gai_assoc_array_iterator* iterator3 = gai_assoc_array_next(
+        iterator2);
+    ASSERT_EQ(iterator2, iterator3);
+
+    EXPECT_EQ(NULL, gai_assoc_array_next(iterator3));
+}
+
+
+
+TEST_F(GaiAssocArrayTest, theIteratorCanBeUsedToRetrieveTheKeysOfTheArray)
+{
+    gai_assoc_array_set(array, "key1", "abc");
+    gai_assoc_array_set(array, "key2", "def");
+    gai_assoc_array_set(array, "key3", "ghi");
+
+    struct gai_assoc_array_iterator* iterator = gai_assoc_array_begin(array);
+    EXPECT_STREQ("key1", gai_assoc_array_get_key(iterator));
+    gai_assoc_array_next(iterator);
+    EXPECT_STREQ("key2", gai_assoc_array_get_key(iterator));
+    gai_assoc_array_next(iterator);
+    EXPECT_STREQ("key3", gai_assoc_array_get_key(iterator));
+    gai_assoc_array_iterator_free(iterator);
+}
+
+
+
+TEST_F(GaiAssocArrayTest, theIteratorCanBeUsedToRetrieveTheValuesOfTheArray)
+{
+    gai_assoc_array_set(array, "key1", "abc");
+    gai_assoc_array_set(array, "key2", "def");
+    gai_assoc_array_set(array, "key3", "ghi");
+
+    struct gai_assoc_array_iterator* iterator = gai_assoc_array_begin(array);
+    EXPECT_STREQ("abc", gai_assoc_array_get_value(iterator));
+    gai_assoc_array_next(iterator);
+    EXPECT_STREQ("def", gai_assoc_array_get_value(iterator));
+    gai_assoc_array_next(iterator);
+    EXPECT_STREQ("ghi", gai_assoc_array_get_value(iterator));
+    gai_assoc_array_iterator_free(iterator);
+}

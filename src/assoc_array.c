@@ -15,6 +15,10 @@ struct gai_assoc_array {
     struct gai_assoc_array_node* head;
 };
 
+struct gai_assoc_array_iterator {
+    struct gai_assoc_array_node* node;
+};
+
 
 
 struct gai_assoc_array_node* _gai_assoc_array_node_new(
@@ -135,5 +139,67 @@ const char* gai_assoc_array_get(
     if (_gai_assoc_array_find(array, key, &iterator) == 0) {
         return iterator->value;
     }
+    return NULL;
+}
+
+
+
+struct gai_assoc_array_iterator* gai_assoc_array_begin(
+    struct gai_assoc_array* array)
+{
+    if (array->head == NULL) {
+        return NULL;
+    }
+
+    struct gai_assoc_array_iterator* iterator = malloc(
+        sizeof(struct gai_assoc_array_iterator));
+    iterator->node = array->head;
+    return iterator;
+}
+
+
+
+void gai_assoc_array_iterator_free(
+    struct gai_assoc_array_iterator* iterator)
+{
+    free(iterator);
+}
+
+
+
+const char* gai_assoc_array_get_key(
+    struct gai_assoc_array_iterator* iterator)
+{
+    if (iterator && iterator->node) {
+        return iterator->node->key;
+    }
+    return NULL;
+}
+
+
+
+const char* gai_assoc_array_get_value(
+    struct gai_assoc_array_iterator* iterator)
+{
+    if (iterator && iterator->node) {
+        return iterator->node->value;
+    }
+    return NULL;
+}
+
+
+
+struct gai_assoc_array_iterator* gai_assoc_array_next(
+    struct gai_assoc_array_iterator* iterator)
+{
+    if (iterator && iterator->node) {
+        if (iterator->node->next == NULL) {
+            // At the end of the list return NULL
+            return NULL;
+        }
+        iterator->node = iterator->node->next;
+        return iterator;
+    }
+    gai_assoc_array_iterator_free(iterator);
     return NULL;
 }

@@ -7,6 +7,7 @@ extern "C" {
 
 // Forward declarations
 struct gai_assoc_array;
+struct gai_assoc_array_iterator;
 
 
 
@@ -48,6 +49,47 @@ void gai_assoc_array_set(
 const char* gai_assoc_array_get(
     struct gai_assoc_array* array,
     const char* key);
+
+/**
+ * Retrieves an iterator which points to the beginning of the given @a array
+ */
+struct gai_assoc_array_iterator* gai_assoc_array_begin(
+    struct gai_assoc_array* array);
+
+/**
+ * Frees the array @a iterator instance.
+ */
+void gai_assoc_array_iterator_free(struct gai_assoc_array_iterator* iterator);
+
+/**
+ * Retrieves the key for the item pointed to by the given @a iterator
+ *
+ * If the iterator is invalid, NULL will be returned. Notice, though, that NULL
+ * is a valid key.
+ */
+const char* gai_assoc_array_get_key(
+    struct gai_assoc_array_iterator* iterator);
+
+/**
+ * Retrieves the value for the item pointed to by the given @a iterator
+ *
+ * If the iterator is invalid, NULL will be returned. Notice, though, that NULL
+ * is a valid value.
+ */
+const char* gai_assoc_array_get_value(
+    struct gai_assoc_array_iterator* iterator);
+
+/**
+ * Moves the @a iterator to the next item in the array
+ *
+ * When the at the end of the list, a NULL value is returned, and the
+ * @a iterator is free-ed with gai_assoc_array_iterator_free().
+ *
+ * @return The iterator, identical to the value that is passed in, or NULL when
+ *         the end of the array is reached.
+ */
+struct gai_assoc_array_iterator* gai_assoc_array_next(
+    struct gai_assoc_array_iterator* iterator);
 
 #ifdef __cplusplus
 }
