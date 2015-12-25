@@ -78,6 +78,7 @@ void gai_assoc_array_free(struct gai_assoc_array* array)
         _gai_assoc_array_node_free(iterator);
         iterator = next_iterator;
     }
+    free(array);
 }
 
 
@@ -195,6 +196,7 @@ struct gai_assoc_array_iterator* gai_assoc_array_next(
     if (iterator && iterator->node) {
         if (iterator->node->next == NULL) {
             // At the end of the list return NULL
+            gai_assoc_array_iterator_free(iterator);
             return NULL;
         }
         iterator->node = iterator->node->next;
