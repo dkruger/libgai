@@ -7,7 +7,7 @@
 // Define the gai_assoc_array struct, its contents are private
 struct gai_assoc_array_node {
     struct gai_assoc_array_node* next;
-    char* name;
+    char* key;
     char* value;
 };
 
@@ -18,7 +18,7 @@ struct gai_assoc_array {
 
 
 struct gai_assoc_array_node* _gai_assoc_array_node_new(
-    const char* name,
+    const char* key,
     const char* value)
 {
     struct gai_assoc_array_node* node = malloc(
@@ -27,10 +27,10 @@ struct gai_assoc_array_node* _gai_assoc_array_node_new(
         return node;
     }
     node->next = NULL;
-    if (name != NULL) {
-        node->name = strdup(name);
+    if (key != NULL) {
+        node->key = strdup(key);
     } else {
-        node->name = NULL;
+        node->key = NULL;
     }
     if (value != NULL) {
         node->value = strdup(value);
@@ -44,7 +44,7 @@ struct gai_assoc_array_node* _gai_assoc_array_node_new(
 
 void _gai_assoc_array_node_free(struct gai_assoc_array_node* node)
 {
-    free(node->name);
+    free(node->key);
     free(node->value);
     free(node);
 }
@@ -80,13 +80,13 @@ void gai_assoc_array_free(struct gai_assoc_array* array)
 
 int _gai_assoc_array_find(
     struct gai_assoc_array* array,
-    const char* name,
+    const char* key,
     struct gai_assoc_array_node** last)
 {
-    // This is a helper function to find a node with the given name
+    // This is a helper function to find a node with the given key
     for (*last = array->head; *last != NULL; *last = (*last)->next) {
-        if (((*last)->name == name) ||
-            ((*last)->name && (strcmp(name, (*last)->name) == 0))) {
+        if (((*last)->key == key) ||
+            ((*last)->key && (strcmp(key, (*last)->key) == 0))) {
             return 0;
         }
         if ((*last)->next == NULL) {
@@ -100,18 +100,18 @@ int _gai_assoc_array_find(
 
 void gai_assoc_array_set(
     struct gai_assoc_array* array,
-    const char* name,
+    const char* key,
     const char* value)
 {
     // If this is the first entry, create the head node and return
     if (array->head == NULL) {
-        array->head = _gai_assoc_array_node_new(name, value);
+        array->head = _gai_assoc_array_node_new(key, value);
         return;
     }
 
     // Find the place in the array to put the value
     struct gai_assoc_array_node* iterator = NULL;
-    if (_gai_assoc_array_find(array, name, &iterator) == 0) {
+    if (_gai_assoc_array_find(array, key, &iterator) == 0) {
         // We found an existing entry in the list, overwrite the value
         free(iterator->value);
         if (value != NULL) {
@@ -121,7 +121,7 @@ void gai_assoc_array_set(
         }
     } else {
         // The iterator is pointing to the end of the array, we append the item
-        iterator->next = _gai_assoc_array_node_new(name, value);
+        iterator->next = _gai_assoc_array_node_new(key, value);
     }
 }
 
@@ -129,10 +129,10 @@ void gai_assoc_array_set(
 
 const char* gai_assoc_array_get(
     struct gai_assoc_array* array,
-    const char* name)
+    const char* key)
 {
     struct gai_assoc_array_node* iterator = NULL;
-    if (_gai_assoc_array_find(array, name, &iterator) == 0) {
+    if (_gai_assoc_array_find(array, key, &iterator) == 0) {
         return iterator->value;
     }
     return NULL;
