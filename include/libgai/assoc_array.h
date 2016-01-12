@@ -19,11 +19,23 @@ struct gai_assoc_array_iterator;
 struct gai_assoc_array* gai_assoc_array_new();
 
 /**
+ * Create a new deep copy of the @a source, to free use gai_assoc_array_free()
+ */
+struct gai_assoc_array* gai_assoc_array_copy(struct gai_assoc_array* source);
+
+/**
  * Frees the @a array instance.
  *
  * This will free the @a array, along with any values stored in the array.
  */
 void gai_assoc_array_free(struct gai_assoc_array* array);
+
+/**
+ * Tests if the given @a array is empty
+ *
+ * @return 1 if the @a array is empty, 0 otherwise
+ */
+int gai_assoc_array_is_empty(struct gai_assoc_array* array);
 
 /**
  * Associates the given @a value with the given @a key in the @a array

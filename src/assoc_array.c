@@ -46,6 +46,18 @@ struct gai_assoc_array_node* _gai_assoc_array_node_new(
 
 
 
+struct gai_assoc_array_node* _gai_assoc_array_node_copy(
+    struct gai_assoc_array_node* source)
+{
+    if (source == NULL) {
+        return NULL;
+    }
+
+    return _gai_assoc_array_node_new(source->key, source->value);
+}
+
+
+
 void _gai_assoc_array_node_free(struct gai_assoc_array_node* node)
 {
     free(node->key);
@@ -67,6 +79,33 @@ struct gai_assoc_array* gai_assoc_array_new()
 
 
 
+struct gai_assoc_array* gai_assoc_array_copy(struct gai_assoc_array* source)
+{
+    // Create a new array which will hold the copy
+    struct gai_assoc_array* copy = gai_assoc_array_new();
+    if (source->head == NULL) {
+        // The source is empty, don't bother doing anymore work
+        return copy;
+    }
+
+    // Deeply copy the head
+    copy->head = _gai_assoc_array_node_copy(source->head);
+
+    // Walk through the list making a deep copy of each node
+    struct gai_assoc_array_node* dstNodeParent = copy->head;
+    struct gai_assoc_array_node* srcNode = NULL;
+    for (srcNode = source->head->next;
+         srcNode != NULL;
+         srcNode = srcNode->next) {
+        dstNodeParent->next = _gai_assoc_array_node_copy(srcNode);
+        dstNodeParent = dstNodeParent->next;
+    }
+
+    return copy;
+}
+
+
+
 void gai_assoc_array_free(struct gai_assoc_array* array)
 {
     if (array == NULL) {
@@ -79,6 +118,16 @@ void gai_assoc_array_free(struct gai_assoc_array* array)
         iterator = next_iterator;
     }
     free(array);
+}
+
+
+
+int gai_assoc_array_is_empty(struct gai_assoc_array* array)
+{
+    if (array->head == NULL) {
+        return 1; // The array is "empty"
+    }
+    return 0; // The array is not "empty"
 }
 
 

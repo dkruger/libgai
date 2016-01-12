@@ -36,6 +36,13 @@ TEST_F(GaiAssocArrayTest, aNewInstanceShouldNotBeNull)
 
 
 
+TEST_F(GaiAssocArrayTest, aNewInstanceIsEmpty)
+{
+    EXPECT_EQ(1, gai_assoc_array_is_empty(array));
+}
+
+
+
 TEST_F(GaiAssocArrayTest, retrievingAnEntryFromAnEmptyArrayReturnsNull)
 {
     EXPECT_EQ(NULL, gai_assoc_array_get(array, "key"));
@@ -175,4 +182,31 @@ TEST_F(GaiAssocArrayTest, theIteratorCanBeUsedToRetrieveTheValuesOfTheArray)
     gai_assoc_array_next(iterator);
     EXPECT_STREQ("ghi", gai_assoc_array_get_value(iterator));
     gai_assoc_array_iterator_free(iterator);
+}
+
+
+
+TEST_F(GaiAssocArrayTest, copyingTheArrayMakesADeepCopy)
+{
+    gai_assoc_array_set(array, "key1", "abc");
+    gai_assoc_array_set(array, "key2", "def");
+    gai_assoc_array_set(array, "key3", "ghi");
+
+    struct gai_assoc_array* copy = gai_assoc_array_copy(array);
+    gai_assoc_array_set(array, "key1", "bobby");
+
+    EXPECT_STREQ("abc", gai_assoc_array_get(copy, "key1"));
+    EXPECT_STREQ("def", gai_assoc_array_get(copy, "key2"));
+    EXPECT_STREQ("ghi", gai_assoc_array_get(copy, "key3"));
+    gai_assoc_array_free(copy);
+}
+
+
+
+TEST_F(GaiAssocArrayTest, copyingAnEmptyArrayReturnsAnEmptyArray)
+{
+    struct gai_assoc_array* copy = gai_assoc_array_copy(array);
+
+    EXPECT_EQ(1, gai_assoc_array_is_empty(copy));
+    gai_assoc_array_free(copy);
 }
