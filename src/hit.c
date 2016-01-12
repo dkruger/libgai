@@ -25,6 +25,8 @@ void _gai_hit_set_indexed_parameter(
     const char* value,
     struct gai_hit* hit);
 
+const char* _gai_hit_type_to_string(gai_hit_type type);
+
 
 
 // Custom dimensions and metrics parameters are indexed with a known prefix
@@ -60,6 +62,15 @@ void gai_hit_free(struct gai_hit* hit)
 gai_hit_type gai_hit_get_type(struct gai_hit* hit)
 {
     return hit->type;
+}
+
+
+
+struct gai_assoc_array* gai_hit_build(struct gai_hit* hit)
+{
+    struct gai_assoc_array* hit_params = gai_assoc_array_copy(hit->parameters);
+    gai_assoc_array_set(hit_params, "t", _gai_hit_type_to_string(hit->type));
+    return hit_params;
 }
 
 
@@ -129,8 +140,8 @@ char* _gai_hit_create_indexed_parameter_name(
     size_t max_index_length,
     int index)
 {
-    size_t max_param_len = strlen(name_prefix) + max_index_length;
-    char* parameter_name = malloc(sizeof(char)*(max_param_len+1));
+    size_t max_param_len = strlen(name_prefix) + max_index_length + 1;
+    char* parameter_name = malloc(sizeof(char)*(max_param_len));
     snprintf(
         parameter_name,
         max_param_len,
@@ -138,4 +149,21 @@ char* _gai_hit_create_indexed_parameter_name(
         name_prefix,
         index);
     return parameter_name;
+}
+
+
+
+const char* _gai_hit_type_to_string(gai_hit_type type)
+{
+    switch (type) {
+        case GAI_HIT_PAGEVIEW: return "pageview";
+        case GAI_HIT_SCREENVIEW: return "screenview";
+        case GAI_HIT_EVENT: return "event";
+        case GAI_HIT_TRANSACTION: return "transaction";
+        case GAI_HIT_ITEM: return "item";
+        case GAI_HIT_SOCIAL: return "social";
+        case GAI_HIT_EXCEPTION: return "exception";
+        case GAI_HIT_TIMING: return "timing";
+    }
+    return "unknown";
 }

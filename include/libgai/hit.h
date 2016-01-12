@@ -7,6 +7,7 @@ extern "C" {
 
 // Forward declarations
 struct gai_hit;
+struct gai_assoc_array;
 
 
 
@@ -43,6 +44,13 @@ void gai_hit_free(struct gai_hit* hit);
  * Retrieves the type assigned to the given @a hit.
  */
 gai_hit_type gai_hit_get_type(struct gai_hit* hit);
+
+/**
+ * Builds a map (associated array) of the hit's parameters and values
+ *
+ * This can be used with the gai_tracker object to send hits.
+ */
+struct gai_assoc_array* gai_hit_build(struct gai_hit* hit);
 
 /**
  * Sets the parameter on the GAI @a hit to with the given @a name and @a value
