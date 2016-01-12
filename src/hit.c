@@ -12,8 +12,22 @@ struct gai_hit {
     struct gai_assoc_array* parameters;
 };
 
+// Forward declarations for internal helper functions
+char* _gai_hit_create_indexed_parameter_name(
+    const char* name_prefix,
+    size_t max_index_length,
+    int index);
+
+void _gai_hit_set_indexed_parameter(
+    const char* name_prefix,
+    size_t max_index_length,
+    int index,
+    const char* value,
+    struct gai_hit* hit);
 
 
+
+// Custom dimensions and metrics parameters are indexed with a known prefix
 static const char* CUSTOM_DIMENSION_PARAMETER_PREFIX = "cd";
 static size_t CUSTOM_DIMENSION_MAX_INDEX_LENGTH = 3; // 1-200
 
@@ -61,39 +75,6 @@ struct gai_hit* gai_hit_set_parameter(
 
 
 
-char* _gai_hit_create_indexed_parameter_name(
-    const char* name_prefix,
-    size_t max_index_length,
-    int index)
-{
-    size_t max_param_len = strlen(name_prefix) + max_index_length;
-    char* parameter_name = malloc(sizeof(char)*(max_param_len+1));
-    snprintf(
-        parameter_name,
-        max_param_len,
-        "%s%d",
-        name_prefix,
-        index);
-    return parameter_name;
-}
-
-
-
-void _gai_hit_set_indexed_parameter(
-    const char* name_prefix,
-    size_t max_index_length,
-    int index,
-    const char* value,
-    struct gai_hit* hit)
-{
-    char* parameter_name = _gai_hit_create_indexed_parameter_name(
-        name_prefix, max_index_length, index);
-    gai_hit_set_parameter(parameter_name, value, hit);
-    free(parameter_name);
-}
-
-
-
 struct gai_hit* gai_hit_set_custom_dimension(
     int index,
     const char* dimension,
@@ -124,4 +105,37 @@ struct gai_hit* gai_hit_set_custom_metric(
         value,
         hit);
     return hit;
+}
+
+
+
+void _gai_hit_set_indexed_parameter(
+    const char* name_prefix,
+    size_t max_index_length,
+    int index,
+    const char* value,
+    struct gai_hit* hit)
+{
+    char* parameter_name = _gai_hit_create_indexed_parameter_name(
+        name_prefix, max_index_length, index);
+    gai_hit_set_parameter(parameter_name, value, hit);
+    free(parameter_name);
+}
+
+
+
+char* _gai_hit_create_indexed_parameter_name(
+    const char* name_prefix,
+    size_t max_index_length,
+    int index)
+{
+    size_t max_param_len = strlen(name_prefix) + max_index_length;
+    char* parameter_name = malloc(sizeof(char)*(max_param_len+1));
+    snprintf(
+        parameter_name,
+        max_param_len,
+        "%s%d",
+        name_prefix,
+        index);
+    return parameter_name;
 }
