@@ -20,6 +20,7 @@ void gai_curl_transport_free(void* context);
 struct gai_transport* gai_curl_transport_new()
 {
     struct gai_transport_operations operations;
+    gai_transport_operations_init(&operations);
     operations.free = gai_curl_transport_free;
 
     struct gai_curl_transport_impl* curl_impl = gai_curl_transport_impl_new();

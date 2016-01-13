@@ -35,7 +35,28 @@ void gai_transport_free(struct gai_transport* transport)
 
 
 
+char* gai_transport_serialize(
+    struct gai_transport* transport,
+    struct gai_assoc_array* params)
+{
+    if (transport && transport->operations.serialize) {
+        // Run the implementation serialiation
+        return transport->operations.serialize(params, transport->context);
+    }
+    return NULL;
+}
+
+
+
 void* gai_transport_get_context(struct gai_transport* transport)
 {
     return transport->context;
+}
+
+
+
+void gai_transport_operations_init(struct gai_transport_operations* operations)
+{
+    operations->free = NULL;
+    operations->serialize = NULL;
 }

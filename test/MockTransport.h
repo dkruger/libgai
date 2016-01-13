@@ -12,6 +12,8 @@ class MockTransport
 {
 public:
     MOCK_METHOD1(free, void(void* context));
+    MOCK_METHOD2(serialize, char*(struct gai_assoc_array* params,
+                                 void* context));
 };
 
 /**
@@ -23,6 +25,13 @@ typedef ::testing::NiceMock<MockTransport> NiceMockTransport;
  * Trampoline function for NiceMockTransport::free()
  */
 void NiceMockTransport_free_trampoline(void* context);
+
+/**
+ * Trampoline function for NiceMockTransport::serialize()
+ */
+char* NiceMockTransport_serialize_trampoline(
+    struct gai_assoc_array* params,
+    void* context);
 
 /**
  * Creates a GAI transport instance using gai_transport_new(), providing the

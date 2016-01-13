@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include "libgai/transport.h"
+#include "libgai/assoc_array.h"
 #include "MockTransport.h"
 
 
@@ -48,4 +49,18 @@ TEST_F(GaiTransportTest, freeingATransportShouldDelegateToTheImplementation)
 
     gai_transport_free(transport);
     transport = NULL;
+}
+
+
+
+TEST_F(GaiTransportTest, serializingWithATransportShouldDelegateToTheImplementation)
+{
+    struct gai_assoc_array* array = gai_assoc_array_new();
+    EXPECT_CALL(*transport_impl, serialize(::testing::Eq(array),
+                                           ::testing::Eq(transport_impl)))
+        .Times(1);
+
+    gai_transport_serialize(transport, array);
+
+    gai_assoc_array_free(array);
 }
