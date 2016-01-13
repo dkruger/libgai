@@ -2,12 +2,10 @@
 
 
 
-void NiceMockTransport_free_trampoline(
-    struct gai_transport* transport,
-    void* context)
+void NiceMockTransport_free_trampoline(void* context)
 {
     if (context) {
-        static_cast<NiceMockTransport*>(context)->free(transport, context);
+        static_cast<NiceMockTransport*>(context)->free(context);
     }
 }
 

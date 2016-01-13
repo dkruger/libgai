@@ -43,8 +43,7 @@ TEST_F(GaiTransportTest, aNewInstanceShouldNotBeNull)
 
 TEST_F(GaiTransportTest, freeingATransportShouldDelegateToTheImplementation)
 {
-    EXPECT_CALL(*transport_impl, free(::testing::Eq(transport),
-                                      ::testing::Eq(transport_impl)))
+    EXPECT_CALL(*transport_impl, free(::testing::Eq(transport_impl)))
         .Times(1);
 
     gai_transport_free(transport);

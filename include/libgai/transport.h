@@ -41,12 +41,11 @@ void* gai_transport_get_context(struct gai_transport* transport);
 
 
 /**
- * The free() operation for the GAI @a transport implementation
+ * The free() operation for the GAI transport implementation
  *
  * This should free the contents of the given @a context.
  */
 typedef void (*gai_transport_free_op)(
-    struct gai_transport* transport,
     void* context);
 
 /**

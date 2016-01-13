@@ -27,7 +27,7 @@ void gai_transport_free(struct gai_transport* transport)
 {
     if (transport && transport->operations.free) {
         // Run the implementation free which should free the context
-        transport->operations.free(transport, transport->context);
+        transport->operations.free(transport->context);
         transport->context = NULL;
     }
     free(transport);

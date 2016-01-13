@@ -13,9 +13,7 @@ struct gai_curl_transport_impl {
 // Forward declarations for internal helper functions
 struct gai_curl_transport_impl* gai_curl_transport_impl_new();
 
-void gai_curl_transport_free(
-    struct gai_transport* transport,
-    void* context);
+void gai_curl_transport_free(void* context);
 
 
 
@@ -43,11 +41,8 @@ struct gai_curl_transport_impl* gai_curl_transport_impl_new()
 
 
 
-void gai_curl_transport_free(
-    struct gai_transport* transport,
-    void* context)
+void gai_curl_transport_free(void* context)
 {
-    (void)transport; // unused
     struct gai_curl_transport_impl* impl = context;
 
     curl_easy_cleanup(impl->curl);

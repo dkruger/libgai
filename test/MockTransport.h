@@ -11,7 +11,7 @@
 class MockTransport
 {
 public:
-    MOCK_METHOD2(free, void(struct gai_transport* transport, void* context));
+    MOCK_METHOD1(free, void(void* context));
 };
 
 /**
@@ -22,9 +22,7 @@ typedef ::testing::NiceMock<MockTransport> NiceMockTransport;
 /**
  * Trampoline function for NiceMockTransport::free()
  */
-void NiceMockTransport_free_trampoline(
-    struct gai_transport* transport,
-    void* context);
+void NiceMockTransport_free_trampoline(void* context);
 
 /**
  * Creates a GAI transport instance using gai_transport_new(), providing the
