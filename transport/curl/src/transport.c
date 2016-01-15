@@ -1,4 +1,5 @@
 #include "libgai/curl/transport.h"
+#include "libgai/curl/serialize.h"
 #include "libgai/transport.h"
 #include <curl/curl.h>
 #include <stdlib.h>
@@ -15,6 +16,10 @@ struct gai_curl_transport_impl* gai_curl_transport_impl_new();
 
 void gai_curl_transport_free(void* context);
 
+char* gai_curl_transport_serialize(
+    struct gai_assoc_array* params,
+    void* context);
+
 
 
 struct gai_transport* gai_curl_transport_new()
@@ -22,6 +27,7 @@ struct gai_transport* gai_curl_transport_new()
     struct gai_transport_operations operations;
     gai_transport_operations_init(&operations);
     operations.free = gai_curl_transport_free;
+    operations.serialize = gai_curl_transport_serialize;
 
     struct gai_curl_transport_impl* curl_impl = gai_curl_transport_impl_new();
 
@@ -50,4 +56,14 @@ void gai_curl_transport_free(void* context)
     impl->curl = NULL;
 
     free(impl);
+}
+
+
+
+char* gai_curl_transport_serialize(
+    struct gai_assoc_array* params,
+    void* context)
+{
+    struct gai_curl_transport_impl* impl = context;
+    return gai_curl_serialize_params(impl->curl, params);
 }
