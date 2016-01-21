@@ -46,19 +46,21 @@ char* append_parameter(
     char* escapedName = curl_easy_escape(curl, name, 0);
     char* escapedValue = curl_easy_escape(curl, value, 0);
 
-    size_t newSize = 2; // The '=' and the terminating '\0'
+    size_t appendSize = 2; // The '=' and the terminating '\0'
+    size_t currentLen = 0;
     if (current != NULL) {
-        newSize += strlen(current)+1; // We need an '&' separator
+        currentLen = strlen(current);
+        appendSize += 1; // We need an '&' separator
     }
-    newSize += strlen(escapedName);
-    newSize += strlen(escapedValue);
+    appendSize += strlen(escapedName);
+    appendSize += strlen(escapedValue);
 
-    char* appended = realloc(current, newSize);
+    char* appended = realloc(current, appendSize+currentLen);
     if (current != NULL) {
-        snprintf(appended, newSize,
-            "%s&%s=%s", appended, escapedName, escapedValue);
+        snprintf(appended+currentLen, appendSize,
+            "&%s=%s", escapedName, escapedValue);
     } else {
-        snprintf(appended, newSize,
+        snprintf(appended, appendSize,
             "%s=%s", escapedName, escapedValue);
     }
 
