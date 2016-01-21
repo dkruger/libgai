@@ -49,6 +49,7 @@ TEST_F(GaiHitTest, buildingAHitShouldIncludeTheHitType)
     struct gai_assoc_array* params = gai_hit_build(hit);
 
     EXPECT_STREQ("event", gai_assoc_array_get(params, "t"));
+    gai_assoc_array_free(params);
 }
 
 
@@ -62,6 +63,7 @@ TEST_F(GaiHitTest, buildingAHitShouldIncludeAllAddedParameters)
 
     EXPECT_STREQ("bob", gai_assoc_array_get(params, "name"));
     EXPECT_STREQ("moon", gai_assoc_array_get(params, "place"));
+    gai_assoc_array_free(params);
 }
 
 
@@ -75,6 +77,7 @@ TEST_F(GaiHitTest, buildingAHitShouldIncludeCustomMetrics)
 
     EXPECT_STREQ("100", gai_assoc_array_get(params, "cm1"));
     EXPECT_STREQ("42", gai_assoc_array_get(params, "cm200"));
+    gai_assoc_array_free(params);
 }
 
 
@@ -88,4 +91,5 @@ TEST_F(GaiHitTest, buildingAHitShouldIncludeCustomDimensions)
 
     EXPECT_STREQ("foo", gai_assoc_array_get(params, "cd1"));
     EXPECT_STREQ("bar", gai_assoc_array_get(params, "cd200"));
+    gai_assoc_array_free(params);
 }
