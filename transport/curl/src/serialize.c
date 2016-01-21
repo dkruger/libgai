@@ -12,6 +12,15 @@ char* append_parameter(
     const char* name,
     const char* value);
 
+char* create_initial_escaped_parameter(
+    const char* escapedName,
+    const char* escapedValue);
+
+char* append_escaped_parameter(
+    char* current,
+    const char* escapedName,
+    const char* escapedValue);
+
 
 
 char* gai_curl_serialize_params(
@@ -46,25 +55,43 @@ char* append_parameter(
     char* escapedName = curl_easy_escape(curl, name, 0);
     char* escapedValue = curl_easy_escape(curl, value, 0);
 
-    size_t appendSize = 2; // The '=' and the terminating '\0'
-    size_t currentLen = 0;
-    if (current != NULL) {
-        currentLen = strlen(current);
-        appendSize += 1; // We need an '&' separator
-    }
-    appendSize += strlen(escapedName);
-    appendSize += strlen(escapedValue);
-
-    char* appended = realloc(current, appendSize+currentLen);
-    if (current != NULL) {
-        snprintf(appended+currentLen, appendSize,
-            "&%s=%s", escapedName, escapedValue);
+    char* appended = NULL;
+    if (current == NULL) {
+        appended = create_initial_escaped_parameter(escapedName, escapedValue);
     } else {
-        snprintf(appended, appendSize,
-            "%s=%s", escapedName, escapedValue);
+        appended = append_escaped_parameter(current, escapedName, escapedValue);
     }
 
     curl_free(escapedName);
     curl_free(escapedValue);
+    return appended;
+}
+
+
+
+char* create_initial_escaped_parameter(
+    const char* escapedName,
+    const char* escapedValue)
+{
+    // Create a string <name>=<value>\0
+    size_t initialSize = strlen(escapedName) + strlen(escapedValue) + 2;
+    char* parameter = malloc(initialSize);
+    snprintf(parameter, initialSize, "%s=%s", escapedName, escapedValue);
+    return parameter;
+}
+
+
+
+char* append_escaped_parameter(
+    char* current,
+    const char* escapedName,
+    const char* escapedValue)
+{
+    // Create a string <current>&<name>=<value>\0
+    size_t currentLen = strlen(current);
+    size_t appendSize = strlen(escapedName) + strlen(escapedValue) + 3;
+    char* appended = realloc(current, appendSize+currentLen);
+    snprintf(appended+currentLen, appendSize,
+        "&%s=%s", escapedName, escapedValue);
     return appended;
 }
