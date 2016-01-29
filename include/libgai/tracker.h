@@ -37,14 +37,11 @@ extern const char* GAI_TRACKER_DEFAULT_TARGET;
  *
  * The transport provided will be used for sending the hit calls. The tracker
  * leaves ownership of the @a transport to the caller.
- *
- * The ownership of context is left to the caller.
  */
 struct gai_tracker* gai_tracker_new(
     const char* tracking_id,
     const char* client_id,
-    struct gai_transport* transport,
-    void* context);
+    struct gai_transport* transport);
 
 /**
  * Frees the @a tracker instance.

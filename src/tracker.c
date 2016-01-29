@@ -11,7 +11,6 @@ struct gai_tracker {
     char* http_host;
     char* http_target;
     struct gai_transport* transport;
-    void* context;
 };
 
 
@@ -24,14 +23,12 @@ const char* GAI_TRACKER_DEFAULT_TARGET = "/collect";
 struct gai_tracker* gai_tracker_new(
     const char* tracking_id,
     const char* client_id,
-    struct gai_transport* transport,
-    void* context)
+    struct gai_transport* transport)
 {
     struct gai_tracker* tracker = malloc(sizeof(struct gai_tracker));
     tracker->tracking_id = strdup(tracking_id);
     tracker->client_id = strdup(client_id);
     tracker->transport = transport;
-    tracker->context = context;
     tracker->http_host = strdup(GAI_TRACKER_DEFAULT_HOST);
     tracker->http_target = strdup(GAI_TRACKER_DEFAULT_TARGET);
     return tracker;

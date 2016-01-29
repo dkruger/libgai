@@ -21,7 +21,7 @@ const char* GaiTrackerTest::client_id = "35009a79-1a05-49d7-b876-2b884d0f825b";
 
 void GaiTrackerTest::SetUp()
 {
-    tracker = gai_tracker_new(tracking_id, client_id, NULL, NULL);
+    tracker = gai_tracker_new(tracking_id, client_id, NULL);
 }
 
 
