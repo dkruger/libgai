@@ -7,6 +7,7 @@ extern "C" {
 
 // Forward declarations
 struct gai_tracker;
+struct gai_transport;
 
 
 
@@ -34,11 +35,15 @@ extern const char* GAI_TRACKER_DEFAULT_TARGET;
  * client tracking over multiple sessions, this should be reatined in the
  * system. @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#cid
  *
+ * The transport provided will be used for sending the hit calls. The tracker
+ * leaves ownership of the @a transport to the caller.
+ *
  * The ownership of context is left to the caller.
  */
 struct gai_tracker* gai_tracker_new(
     const char* tracking_id,
     const char* client_id,
+    struct gai_transport* transport,
     void* context);
 
 /**
