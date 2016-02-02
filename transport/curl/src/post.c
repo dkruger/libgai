@@ -9,7 +9,7 @@ int gai_curl_post(
 {
     curl_easy_setopt(curl, CURLOPT_URL, url);
     if (payload) {
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload);
+        curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, payload);
     }
 
     CURLcode res = curl_easy_perform(curl);
