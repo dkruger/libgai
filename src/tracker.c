@@ -8,15 +8,14 @@
 struct gai_tracker {
     char* tracking_id;
     char* client_id;
-    char* http_host;
-    char* http_target;
+    char* url;
     struct gai_transport* transport;
 };
 
 
 
-const char* GAI_TRACKER_DEFAULT_HOST = "www.google-analytics.com";
-const char* GAI_TRACKER_DEFAULT_TARGET = "/collect";
+const char* GAI_TRACKER_DEFAULT_SERVER_URL = "http://www.google-analytics.com/collect";
+const int GAI_TRACKER_MAX_HIT_PAYLOAD_SIZE = 8192; // 8k limit on hits
 
 
 
@@ -29,8 +28,7 @@ struct gai_tracker* gai_tracker_new(
     tracker->tracking_id = strdup(tracking_id);
     tracker->client_id = strdup(client_id);
     tracker->transport = transport;
-    tracker->http_host = strdup(GAI_TRACKER_DEFAULT_HOST);
-    tracker->http_target = strdup(GAI_TRACKER_DEFAULT_TARGET);
+    tracker->url = strdup(GAI_TRACKER_DEFAULT_SERVER_URL);
     return tracker;
 }
 
@@ -40,8 +38,7 @@ void gai_tracker_free(struct gai_tracker* tracker)
 {
     free(tracker->tracking_id);
     free(tracker->client_id);
-    free(tracker->http_host);
-    free(tracker->http_target);
+    free(tracker->url);
     free(tracker);
 }
 
@@ -63,11 +60,8 @@ const char* gai_client_id(struct gai_tracker* tracker)
 
 void gai_tracker_set_server(
     struct gai_tracker* tracker,
-    const char* host,
-    const char* target)
+    const char* url)
 {
-    free(tracker->http_host);
-    free(tracker->http_target);
-    tracker->http_host = strdup(host);
-    tracker->http_target = strdup(target);
+    free(tracker->url);
+    tracker->url = strdup(url);
 }

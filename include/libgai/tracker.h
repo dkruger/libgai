@@ -12,16 +12,10 @@ struct gai_transport;
 
 
 /**
- * The default HTTP host for the GAI tracker
- * @see gai_tracker_set_server()
- */
-extern const char* GAI_TRACKER_DEFAULT_HOST;
-
-/**
  * The default HTTP target for the GAI tracker
  * @see gai_tracker_set_server()
  */
-extern const char* GAI_TRACKER_DEFAULT_TARGET;
+extern const char* GAI_TRACKER_DEFAULT_SERVER_URL;
 
 
 
@@ -61,15 +55,16 @@ const char* gai_client_id(struct gai_tracker* tracker);
 /**
  * Overrides the default analytics server
  *
- * By default host is www.google-analytics.com and the target is "/collect".
+ * By default the tracker is configured to use the official google analytics
+ * server at http://www.google-analytics.com/collect.
+ *
  * By overriding the target to "/debug/collect" for example, the hits can be
  * validated by the Google Analytics server.
  * @see https://developers.google.com/analytics/devguides/collection/protocol/v1/validating-hits
  */
 void gai_tracker_set_server(
     struct gai_tracker* tracker,
-    const char* host,
-    const char* target);
+    const char* url);
 
 #ifdef __cplusplus
 }
