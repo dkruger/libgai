@@ -64,3 +64,19 @@ TEST_F(GaiTransportTest, serializingWithATransportShouldDelegateToTheImplementat
 
     gai_assoc_array_free(array);
 }
+
+
+
+TEST_F(GaiTransportTest, postingWithATransportShouldDelegateToTheImplementation)
+{
+    const char* test_url = "http://www.example.com";
+    const char* test_payload = "a=1&b=2";
+    EXPECT_CALL(*transport_impl, post(::testing::Eq(test_url),
+                                      ::testing::Eq(test_payload),
+                                      ::testing::Eq(transport_impl)))
+        .WillOnce(::testing::Return(1234));
+
+    int ret = gai_transport_post(transport, test_url, test_payload);
+
+    EXPECT_EQ(1234, ret);
+}

@@ -24,6 +24,20 @@ char* NiceMockTransport_serialize_trampoline(
 
 
 
+int NiceMockTransport_post_trampoline(
+    const char* url,
+    const char* payload,
+    void* context)
+{
+    if (context) {
+        return static_cast<NiceMockTransport*>(context)->post(
+            url, payload, context);
+    }
+    return -1;
+}
+
+
+
 struct gai_transport* create_nicemocked_gai_transport(
     NiceMockTransport* mock)
 {
@@ -31,5 +45,6 @@ struct gai_transport* create_nicemocked_gai_transport(
     gai_transport_operations_init(&operations);
     operations.free = NiceMockTransport_free_trampoline;
     operations.serialize = NiceMockTransport_serialize_trampoline;
+    operations.post = NiceMockTransport_post_trampoline;
     return gai_transport_new(operations, mock);
 }

@@ -48,6 +48,20 @@ char* gai_transport_serialize(
 
 
 
+int gai_transport_post(
+    struct gai_transport* transport,
+    const char* url,
+    const char* payload)
+{
+    if (transport && transport->operations.post) {
+        // Run the implementation post
+        return transport->operations.post(url, payload, transport->context);
+    }
+    return -1;
+}
+
+
+
 void* gai_transport_get_context(struct gai_transport* transport)
 {
     return transport->context;
@@ -59,4 +73,5 @@ void gai_transport_operations_init(struct gai_transport_operations* operations)
 {
     operations->free = NULL;
     operations->serialize = NULL;
+    operations->post = NULL;
 }

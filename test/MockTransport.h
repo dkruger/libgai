@@ -13,7 +13,10 @@ class MockTransport
 public:
     MOCK_METHOD1(free, void(void* context));
     MOCK_METHOD2(serialize, char*(struct gai_assoc_array* params,
-                                 void* context));
+                                  void* context));
+    MOCK_METHOD3(post, int(const char* url,
+                           const char* payload,
+                           void* context));
 };
 
 /**
@@ -31,6 +34,14 @@ void NiceMockTransport_free_trampoline(void* context);
  */
 char* NiceMockTransport_serialize_trampoline(
     struct gai_assoc_array* params,
+    void* context);
+
+/**
+ * Trampoline function for NiceMockTransport::post()
+ */
+int NiceMockTransport_post_trampoline(
+    const char* url,
+    const char* payload,
     void* context);
 
 /**
