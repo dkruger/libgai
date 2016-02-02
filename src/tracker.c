@@ -1,4 +1,8 @@
 #include "libgai/tracker.h"
+#include "libgai/transport.h"
+#include "libgai/assoc_array.h"
+#include "libgai/hit.h"
+#include "libgai/error.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -64,4 +68,48 @@ void gai_tracker_set_server(
 {
     free(tracker->url);
     tracker->url = strdup(url);
+}
+
+
+
+int gai_tracker_post(struct gai_tracker* tracker, const char* payload)
+{
+    return gai_transport_post(
+        tracker->transport,
+        tracker->url,
+        payload);
+}
+
+
+
+int gai_send(
+    struct gai_tracker* tracker,
+    struct gai_assoc_array* parameters)
+{
+    char* payload = gai_transport_serialize(tracker->transport, parameters);
+    // Google Analytics has a limit on the max size of a hit
+    // @see https://developers.google.com/analytics/devguides/collection/protocol/v1/reference
+    if (payload && (strlen(payload) > GAI_TRACKER_MAX_HIT_PAYLOAD_SIZE)) {
+        free(payload);
+        return GAI_ERR_HIT_TOO_BIG;
+    }
+    gai_tracker_post(tracker, payload);
+    free(payload);
+    return 0;
+}
+
+
+
+int gai_send_hit(struct gai_tracker* tracker, struct gai_hit* hit)
+{
+    // Assign the required tracker-level parameters
+    gai_hit_set_parameter("v", "1", hit);
+    gai_hit_set_parameter("tid", tracker->tracking_id, hit);
+    gai_hit_set_parameter("cid", tracker->client_id, hit);
+
+    struct gai_assoc_array* hit_params = gai_hit_build(hit);
+    int ret = gai_send(tracker, hit_params);
+    gai_assoc_array_free(hit_params);
+    gai_hit_free(hit);
+    return ret;
 }
