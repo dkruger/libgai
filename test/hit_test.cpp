@@ -48,7 +48,7 @@ TEST_F(GaiHitTest, buildingAHitShouldIncludeTheHitType)
 {
     struct gai_assoc_array* params = gai_hit_build(hit);
 
-    EXPECT_STREQ("event", gai_assoc_array_get(params, "t"));
+    EXPECT_STREQ("event", gai_assoc_array_get(params, GAI_HIT_PARAM_TYPE));
     gai_assoc_array_free(params);
 }
 

@@ -27,6 +27,21 @@ typedef enum {
 
 
 
+/// The hit paramter name for version
+extern const char* GAI_HIT_PARAM_API_VERSION;
+
+/// The hit paramter name for tracking ID
+extern const char* GAI_HIT_PARAM_TRACKING_ID;
+
+/// The hit paramter name for client ID
+extern const char* GAI_HIT_PARAM_CLIENT_ID;
+
+/// The hit paramter name for hit type
+extern const char* GAI_HIT_PARAM_TYPE;
+
+
+
+
 /**
  * Create a new GAI hit instance, to free use gai_hit_free()
  *
@@ -64,6 +79,36 @@ struct gai_assoc_array* gai_hit_build(struct gai_hit* hit);
 struct gai_hit* gai_hit_set_parameter(
     const char* name,
     const char* value,
+    struct gai_hit* hit);
+
+/**
+ * Sets the API @a version on the GAI @a hit
+ *
+ * @return The hit that the version was set on, this is to allow chaning of
+ *         parameter set calls.
+ */
+struct gai_hit* gai_hit_set_api_version(
+    const char* version,
+    struct gai_hit* hit);
+
+/**
+ * Sets the tracking ID on the GAI @a hit
+ *
+ * @return The hit that the ID was set on, this is to allow chaning of
+ *         parameter set calls.
+ */
+struct gai_hit* gai_hit_set_tracking_id(
+    const char* tracking_id,
+    struct gai_hit* hit);
+
+/**
+ * Sets the client ID on the GAI @a hit
+ *
+ * @return The hit that the ID was set on, this is to allow chaning of
+ *         parameter set calls.
+ */
+struct gai_hit* gai_hit_set_client_id(
+    const char* client_id,
     struct gai_hit* hit);
 
 /**

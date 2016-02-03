@@ -130,8 +130,9 @@ MATCHER_P2(AssocArrayHasEntry, key, value, "")
 
 TEST_F(GaiTrackerTest, shouldAddVersionWhenSendingAHit)
 {
-    EXPECT_CALL(*transport_impl, serialize(AssocArrayHasEntry("v", "1"),
-                                           ::testing::_))
+    EXPECT_CALL(*transport_impl,
+                serialize(AssocArrayHasEntry(GAI_HIT_PARAM_API_VERSION, "1"),
+                          ::testing::_))
         .Times(1);
 
     gai_send_hit(tracker, gai_hit_new(GAI_HIT_EVENT));
@@ -141,8 +142,10 @@ TEST_F(GaiTrackerTest, shouldAddVersionWhenSendingAHit)
 
 TEST_F(GaiTrackerTest, shouldAddTrackingIdWhenSendingAHit)
 {
-    EXPECT_CALL(*transport_impl, serialize(AssocArrayHasEntry("tid", tracking_id),
-                                           ::testing::_))
+    EXPECT_CALL(*transport_impl,
+                serialize(AssocArrayHasEntry(GAI_HIT_PARAM_TRACKING_ID,
+                                             tracking_id),
+                          ::testing::_))
         .Times(1);
 
     gai_send_hit(tracker, gai_hit_new(GAI_HIT_EVENT));
@@ -152,8 +155,10 @@ TEST_F(GaiTrackerTest, shouldAddTrackingIdWhenSendingAHit)
 
 TEST_F(GaiTrackerTest, shouldAddClientIdWhenSendingAHit)
 {
-    EXPECT_CALL(*transport_impl, serialize(AssocArrayHasEntry("cid", client_id),
-                                           ::testing::_))
+    EXPECT_CALL(*transport_impl,
+                serialize(AssocArrayHasEntry(GAI_HIT_PARAM_CLIENT_ID,
+                                             client_id),
+                          ::testing::_))
         .Times(1);
 
     gai_send_hit(tracker, gai_hit_new(GAI_HIT_EVENT));

@@ -103,9 +103,9 @@ int gai_send(
 int gai_send_hit(struct gai_tracker* tracker, struct gai_hit* hit)
 {
     // Assign the required tracker-level parameters
-    gai_hit_set_parameter("v", "1", hit);
-    gai_hit_set_parameter("tid", tracker->tracking_id, hit);
-    gai_hit_set_parameter("cid", tracker->client_id, hit);
+    gai_hit_set_api_version("1", hit);
+    gai_hit_set_tracking_id(tracker->tracking_id, hit);
+    gai_hit_set_client_id(tracker->client_id, hit);
 
     struct gai_assoc_array* hit_params = gai_hit_build(hit);
     int ret = gai_send(tracker, hit_params);
