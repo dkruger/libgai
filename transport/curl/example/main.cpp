@@ -1,7 +1,6 @@
 #include <iostream>
 #include <getopt.h>
 #include "libgai/tracker.h"
-#include "libgai/transport.h"
 #include "libgai/hit.h"
 #include "libgai/curl/transport.h"
 
@@ -12,20 +11,17 @@ class ExampleTracker
 public:
     ExampleTracker(const std::string& tracking_id,
                    const std::string& client_id)
-        : transport(NULL)
-        , tracker(NULL)
+        : tracker(NULL)
     {
-        transport = gai_curl_transport_new();
         tracker = gai_tracker_new(
             tracking_id.c_str(),
             client_id.c_str(),
-            transport);
+            gai_curl_transport_new());
     }
 
     ~ExampleTracker()
     {
         gai_tracker_free(tracker);
-        gai_transport_free(transport);
     }
 
     bool send_hit(struct gai_hit* hit)
@@ -39,7 +35,6 @@ public:
     }
 
 private:
-    struct gai_transport* transport;
     struct gai_tracker* tracker;
 };
 
