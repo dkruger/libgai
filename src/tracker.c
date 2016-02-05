@@ -19,7 +19,7 @@ struct gai_tracker {
 
 
 const char* GAI_TRACKER_DEFAULT_SERVER_URL = "http://www.google-analytics.com/collect";
-const int GAI_TRACKER_MAX_HIT_PAYLOAD_SIZE = 8192; // 8k limit on hits
+const size_t GAI_TRACKER_MAX_HIT_PAYLOAD_SIZE = 8192; // 8k limit on hits
 
 
 
