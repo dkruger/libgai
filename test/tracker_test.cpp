@@ -38,8 +38,6 @@ void GaiTrackerTest::TearDown()
 {
     gai_tracker_free(tracker);
     tracker = NULL;
-    gai_transport_free(transport);
-    transport = NULL;
     delete transport_impl;
     transport_impl = NULL;
 }

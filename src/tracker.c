@@ -40,6 +40,7 @@ struct gai_tracker* gai_tracker_new(
 
 void gai_tracker_free(struct gai_tracker* tracker)
 {
+    gai_transport_free(tracker->transport);
     free(tracker->tracking_id);
     free(tracker->client_id);
     free(tracker->url);

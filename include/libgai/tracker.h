@@ -32,7 +32,7 @@ extern const char* GAI_TRACKER_DEFAULT_SERVER_URL;
  * system. @see https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#cid
  *
  * The transport provided will be used for sending the hit calls. The tracker
- * leaves ownership of the @a transport to the caller.
+ * takes ownership of the @a transport.
  */
 struct gai_tracker* gai_tracker_new(
     const char* tracking_id,
