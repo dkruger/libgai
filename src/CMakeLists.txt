@@ -3,6 +3,7 @@ add_library(gai SHARED
     hit.c
     hit_event.c
     hit_pageview.c
+    hit_queue.c
     tracker.c
     transport.c
     )
