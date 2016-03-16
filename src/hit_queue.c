@@ -46,6 +46,17 @@ size_t gai_hit_queue_payload_overhead(struct gai_hit_queue* queue)
 
 
 
+int gai_hit_queue_enqueue(struct gai_hit_queue* queue, struct gai_hit* hit)
+{
+    if (queue && queue->operations.enqueue) {
+        // Run the implementation serialiation
+        return queue->operations.enqueue(hit, queue->context);
+    }
+    return -1;
+}
+
+
+
 void* gai_hit_queue_get_context(struct gai_hit_queue* queue)
 {
     return queue->context;
@@ -57,4 +68,5 @@ void gai_hit_queue_operations_init(struct gai_hit_queue_operations* operations)
 {
     operations->free = NULL;
     operations->payload_overhead = NULL;
+    operations->enqueue = NULL;
 }

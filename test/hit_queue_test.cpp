@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include "libgai/hit_queue.h"
+#include "libgai/hit.h"
 #include "MockHitQueue.h"
 
 
@@ -60,4 +61,20 @@ TEST_F(GaiHitQueueTest, aHitQueuesPayloadOverheadDependsOnTheImplementation)
     size_t overhead = gai_hit_queue_payload_overhead(hit_queue);
 
     EXPECT_EQ(112233, overhead);
+}
+
+
+
+TEST_F(GaiHitQueueTest, enqueuingAHitDelegatesToTheImplementation)
+{
+    struct gai_hit* hit = gai_hit_new(GAI_HIT_PAGEVIEW);
+    EXPECT_CALL(*hit_queue_impl, enqueue(
+            ::testing::Eq(hit),
+            ::testing::Eq(hit_queue_impl)))
+        .WillOnce(::testing::Return(112233));
+
+    int retcode = gai_hit_queue_enqueue(hit_queue, hit);
+    gai_hit_free(hit);
+
+    EXPECT_EQ(112233, retcode);
 }

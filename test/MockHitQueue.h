@@ -11,9 +11,12 @@
 class MockHitQueue
 {
 public:
-    static const size_t INVALID_PAYLOAD_OVERHEAD;
+    static const size_t PAYLOAD_OVERHEAD_NO_CONTEXT;
+    static const int ENQUEUE_NO_CONTEXT;
+
     MOCK_METHOD1(free, void(void* context));
     MOCK_METHOD1(payload_overhead, size_t(void* context));
+    MOCK_METHOD2(enqueue, int(struct gai_hit* hit, void* context));
 };
 
 /**
@@ -30,6 +33,11 @@ void NiceMockHitQueue_free_trampoline(void* context);
  * Trampoline function for NiceMockHitQueue::payload_overhead()
  */
 size_t NiceMockHitQueue_payload_overhead_trampoline(void* context);
+
+/**
+ * Trampoline function for NiceMockHitQueue::enqueue()
+ */
+int NiceMockHitQueue_enqueue_trampoline(struct gai_hit* hit, void* context);
 
 /**
  * Creates a GAI hit queue instance using gai_hit_queue_new(), providing the

@@ -9,7 +9,7 @@ extern "C" {
 // Forward declarations
 struct gai_hit_queue;
 struct gai_hit_queue_operations;
-struct gai_assoc_array;
+struct gai_hit;
 
 
 
@@ -47,6 +47,18 @@ size_t gai_hit_queue_payload_overhead(struct gai_hit_queue* queue);
 
 
 /**
+ * Enqueus the given @a hit to the hit @a queue.
+ *
+ * The hit may be sent immediately, or (more likely) at a later point depending
+ * on the queuing algorithm.
+ *
+ * @return 0 on success, else an error code
+ */
+int gai_hit_queue_enqueue(struct gai_hit_queue* queue, struct gai_hit* hit);
+
+
+
+/**
  * Retrieve the context for the given GAI hit @a queue
  */
 void* gai_hit_queue_get_context(struct gai_hit_queue* queue);
@@ -66,12 +78,18 @@ typedef void (*gai_hit_queue_free_op)(void* context);
 typedef size_t (*gai_hit_queue_payload_overhead_op)(void* context);
 
 /**
+ * The enqueue() operation for the GAI hit @a queue implementation
+ */
+typedef int (*gai_hit_queue_enqueue_op)(struct gai_hit* hit, void* context);
+
+/**
  * The operations provided by a GAI hit_queue.
  */
 struct gai_hit_queue_operations
 {
     gai_hit_queue_free_op free;
     gai_hit_queue_payload_overhead_op payload_overhead;
+    gai_hit_queue_enqueue_op enqueue;
 };
 
 /**
